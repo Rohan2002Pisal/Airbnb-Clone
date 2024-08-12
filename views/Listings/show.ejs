@@ -1,0 +1,185 @@
+
+<%- layout("/layout/boilerplate.ejs") %>
+
+<script>
+  const MapToken = "<%= process.env.MAP_TOKEN %>" // Bhai ye MAP_TOKEN ko .env se liya hai: (Now youn can directly acess this to map.js: let MApToken = Maptoken;)
+  const listing = <%-JSON.stringify(container1) %>
+</script>
+
+<style>
+        
+    .btn {
+   
+       margin:0.5rem;
+       background-color: #e9888e !important;
+       color: white !important;
+    }
+
+    .container{
+        display: flex;
+    }
+
+  
+
+</style>
+<div class="row mt-3">
+    <div class="col-8 offset-2">
+      <h3> Details for @ <%= container1.title %> </h3>
+    </div>
+
+ <div class="card col-6 offset-3 listing-card">
+    <img
+     src="<%= container1.image.url %>" 
+    class="card-img-top show-image" 
+    alt="Listing/image">
+    
+    <div class="card-body">
+      <h5 class="card-title"> <%= container1.title %> </h5>
+      <p class="card-text"> <i><b>By&nbsp;@<%= container1.owner.username %></b> </i> </p>
+    </div>
+  </div>
+
+
+    <ul>
+        <li><%= container1.Description %></li>
+        <li> &#8377;<%= container1.Price.toLocaleString("en-IN") %></li> <!--Converting price as per indian rupees -->
+        <li><%= container1.Location %></li>
+        <li><%= container1.Country %></li>
+    </ul>
+
+    <br /> <br />
+
+
+<!-- currentUser is got from app.js from locals.-->
+<% if(currentUser && currentUser._id.equals(container1.owner._id)) { %>
+<div class="container">
+    <a href="/listings/<%= container1._id %>/edit" class="btn" style="width:71.22px; height: 37.6px;"> Edit </a>
+
+    <br/> <br/>
+    
+    <form method="POST" action="/listings/<%= container1._id %>?_method=DELETE">
+    <button class="btn" style="background-color: black !important;"> Delete </button>
+    </form>
+</div>
+<% } %>
+
+
+<!-- For review -->
+
+<div class="col-8 offset-3 mb-3" >
+
+  
+<!--Logged in rahoge toh hi review likh pavoge else nahi. varna just dekho review (add review ka option dikhainahi dega.)-->
+  <% if(currentUser) { %>
+    
+  <form action="/listings/<%= container1._id %>/reviews" method="POST" novalidate class="needs-validation" >
+<!--   
+        <div class="mb-3 mt-3">
+          
+          <label for="ratings" class="form-label" > Ratings </label>
+          <input type="range" min="1" max="5" id="rating" name="review[rating]" class="form-range" required />
+          
+        </div> -->
+
+         <!--Rating ka stars-->
+         <div class="mb-3 mt-3">
+
+          <label for="rating" class="form-label" > Rating </label>
+         
+         <fieldset class="starability-slot">
+
+          <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+
+          <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+          <label for="first-rate1" title="Terrible">1 star</label>
+          <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+          <label for="first-rate2" title="Not good">2 stars</label>
+          <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+          <label for="first-rate3" title="Average">3 stars</label>
+          <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+          <label for="first-rate4" title="Very good">4 stars</label>
+          <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+          <label for="first-rate5" title="Amazing">5 stars</label>
+        </fieldset>
+        </div>
+
+        <div class="mb-3 mt-3">
+
+          <label for="comment" calss="form-label" > Comments </label>
+
+          <textarea name="review[comment]" 
+          id="comment" 
+          class="form-control" 
+          cols="30" rows="5" 
+          placeholder="Type Here!..."
+          required></textarea>
+
+
+          <div class="invalid-feedback">
+            please give your review!
+          </div>
+
+        </div>
+      
+       
+       
+        <button class="btn btn-outline-dark">Submit</button>
+
+  </form>
+ <% } %>
+
+
+  <!-- REVIEWS KA SECTION START HO GAYA -->
+<hr/>
+     
+    <% if(container1.reviews.length > 0) { %>
+    
+     <div class="row"> <!--Cause hame ek row me khali 2 hi cards show karne hai.-->
+
+      <p> <b> All Reviews </b> </p>
+     
+        <% for(let review of container1.reviews) { %>
+           <div class="card col-5 mb-3 ms-3"><!--Bootstrap card-->
+            
+             <div class="card-body">
+
+               <h5 class="card-title"> <!-- Uska name jine revire diya hai.-->@<%= review.author.username  %></h5>
+               
+               <p class="starability-result card-text" data-rating="<%= review.rating %>"> </p>
+               
+               <p class="card-text"> <%= review.comment %></p>
+        
+
+
+
+              <form class="mb-3" method="POST" action="/listings/<%= container1._id %>/reviews/<%= review._id %>?_method=DELETE">
+                        
+                <button class="btn" style="background-color: black !important;"> Delete</button>
+              </form>
+
+              </div>
+            </div>
+          
+
+       <% } %>
+     
+      </div>   
+ 
+    <% } %>
+
+
+</div> 
+
+<div class="col-8 offset-3 mb-3">
+
+  <h3> This is your location.</h3>
+
+  <div id="map">
+
+  </div>
+ 
+</div>
+
+</div>
+
+<script src="/js/map.js"> </script>

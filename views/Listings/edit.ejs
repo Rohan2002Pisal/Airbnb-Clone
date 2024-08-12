@@ -1,0 +1,123 @@
+ <%- layout("/layout/boilerplate.ejs") %>  <!-- Ise ham isi liye use kar pa rahe hai cause hame ejs-mate koinstall kiya hai bhai.-->
+    
+ <style>
+        
+    .btn {
+       margin:0.5rem;
+       background-color: #e9888e !important;
+       color: white !important;
+    }
+</style>
+
+    <script>
+        // Function to set the input value based on the selected option
+        function updateCountryInput() {
+            const selectedCountry = document.getElementById('GET-FROM-HERE').value;
+            document.getElementById('PUT-HERE').value = selectedCountry;
+        }
+    </script>
+
+
+<div class="row mt-3">
+    <div class="col-8 offset-2" >
+
+    <h3> Edit Listing </h3>
+    <form method="POST" action="/listings/<%=list._id %>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
+
+    <div class="mb-3">
+        <label for="Title" class="form-label"> Title </label>
+        <input 
+        name="listing[title]" 
+        value ="<%=list.title %>" 
+        type="text"
+        class="form-control"
+        required />
+        <div class="valid-feedback"> Title looks Good </div>
+    </div>
+
+      
+
+    <div class="mb-3">
+         <label for="Description" class="form-label"> Description </label>
+         <input 
+        name="listing[Description]" 
+        value ="<%=list.Description %>" 
+        type="text"
+        class="form-control"
+        required>
+        <div class="valid-feedback"> Good </div>
+     </div>
+
+      
+
+    <div class="mb-3">
+        <label for="Price" class="form-label"> Price </label>
+        <input 
+        name="listing[Price]" 
+        value ="<%=list.Price%>" 
+        type="Number"
+        class="form-control"
+        required>
+        <div class="invalid-feedback"> Enter Valid Price! </div>
+    </div>
+
+    
+    <div class="mb-3">
+        <img src="<%= originalImageUrl %>" />
+    </div>
+    <div class="mb-3"> 
+        <label for="Image" class="form-label"> Upload new Image </label>   
+        <input 
+        name="listing[image]" 
+        type="file"
+        class="form-control">  <!--So agar file naem nananihai toh same use karo image.filename-->
+        
+    </div>
+
+
+
+ <div class="row"> 
+    <div class="mb-3 col-md-4"> 
+        <label for="Location" class="form-label">Location</label>  
+        <input 
+        name="listing[Location]" 
+        value ="<%=list.Location %>" 
+        type="text"
+        class="form-control"
+        required>
+        <div class="invalid-feedback">Enter Valid Location</div>
+    </div>
+
+    <div class="mb-3 col-md-8"> 
+        <label for="Country" class="form-label">Country</label>   
+        <input 
+        name="listing[Country]" 
+        value ="<%=list.Country %>"
+         type="text" 
+         id="PUT-HERE"
+         class="form-control"
+         required>
+         <div class="invalid-feedback">Enter valid country</div>
+    </div>
+</div>
+        
+
+        <select class="form-select" style="width:160px" type="country" id="GET-FROM-HERE" onchange="updateCountryInput()">
+            <option value="India">India</option>
+            <option value="USA">USA</option>
+            <option value="Russia">Russia</option>
+            <option value="UK">UK</option>
+            <option value="Germany">Germany</option>
+            <option value="France">FRANCE</option>
+            <option value="Africa">Africa</option>
+        </select>
+        <br/><br/>
+
+        <button class="btn mt-3"> Edit </button>
+
+    </form>
+
+ </div>
+</div>
+
+

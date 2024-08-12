@@ -1,0 +1,235 @@
+<% layout("layout/boilerplate.ejs") %>
+
+<style>
+
+    #filters {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .filter {
+        text-align: center;
+        margin-right: 2rem; 
+        margin-top: 2rem; 
+        /* margin: auto; */
+        opacity: 0.7;
+    }
+
+    .filter:hover {
+        opacity: 1;
+        cursor: pointer;
+    }
+
+    .filter p{ 
+        font-size: 0.8rem;
+    }
+
+    .btn-primary{
+      margin: 0.5rem !important;
+      border-radius: 0.3rem;
+    }
+
+   
+    .tax-info {
+     display: none;  /* So jab toggle "ON" hoga toh ye reset hona chaiye to "display:inline" cause it is an inline element, if it was an an block element then we would have done "display : block"  */
+    }
+
+    .tax-toggle {
+        border : 1px solid black;
+        border-radius : 1rem;
+        height: 3.25rem;
+        padding: 1rem;
+        margin-left: 2rem;
+        display : flex;
+        align-items: center;
+    }
+    
+</style>
+
+
+    <!-- <h3> All Listings </h3> -->
+
+    <div id="filters">
+        <div class="filter">
+            <div>
+                <i class="fa-solid fa-fire"></i>
+            </div>
+            <p>Trending</p>
+       </div> 
+
+       <div class="filter">
+            <div>
+                <i class="fa-solid fa-house"></i>
+            </div>
+            <p>Rooms</p>
+      </div>
+ 
+
+      <div class="filter">
+            <div>
+                <i class="fa-solid fa-city"></i>
+            </div>
+            <p>Cities</p>
+      </div>
+
+
+      <div class="filter">
+            <div>
+                <i class="fa-solid fa-mountain"></i>
+            </div>
+            <p>Mountains</p>
+       </div>
+
+
+       <div class="filter">
+            <div>
+                <i class="fa-solid fa-utensils"></i>
+            </div>
+            <p>Food</p>
+       </div>
+
+
+       <div class="filter">
+            <div>
+                <i class="fa-solid fa-book"></i>
+            </div>
+            <p>Library</p>
+       </div>
+
+        
+       <div class="filter">
+            <div>
+                <i class="fa-solid fa-plane-departure"></i>
+            </div>
+            <p>Airport</p>
+       </div>
+
+
+
+       <div class="filter">
+            <div>
+                <i class="fa-solid fa-taxi"></i>
+            </div>
+            <p>Travelling</p>
+       </div>
+
+
+
+       <div class="filter">
+            <div>
+                <i class="fa-solid fa-umbrella-beach"></i>
+            </div>
+            <p>Beach</p>
+
+        </div>
+
+
+
+        <div class="filter">
+            <div>
+                <i class="fa-solid fa-water"></i>
+            </div>
+            <p>Lakes</p>
+
+       </div>
+
+
+         <div class="filter">
+            <div>
+                <i class="fa-solid fa-gopuram"></i>
+            </div>
+            <p>Temple</p>
+
+       </div>
+           
+
+
+       
+       <div class="filter">
+        <div>
+            <i class="fa-solid fa-church"></i>
+        </div>
+        <p>Church</p>
+
+      </div>
+
+
+      <div class="filter">
+        <div>
+            <i class="fa-solid fa-tractor"></i>
+        </div>
+        <p>Farms</p>
+
+      </div>
+
+
+      <div class="filter">
+        <div>
+            <i class="fa-solid fa-person-swimming"></i>
+        </div>
+        <p>Swimming Pools</p>
+
+      </div>
+
+<!-- To display taxes-->
+      <div class="tax-toggle">
+        <div class="form-check-reverse form-switch">
+          
+            <input class="form-check-input"
+            type="checkbox" 
+            role="switch" 
+             id="flexSwitchCheckDefault"> 
+
+            <label class="form-check-label" for="flexSwitchCheckDefault">Display Taxes</label>
+        </div>
+      </div>
+
+
+
+    </div>
+
+    <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1"> <!-- Responsive row and columns -->
+        <% for(let lists of allListings){ %>
+        <div class="col mb-4"> <!-- Ensure cards are spaced properly -->
+            <a href="/listings/<%= lists._id %>" class="listing-link">
+                <div class="card col listing-card"> <!-- Ensure full height for flex alignment -->
+                    <img src="<%= lists.image.url %>" class="card-img-top" alt="listings_image" style="height: 20rem" />
+                    <div class="card-img-overlay"> ABCD </div>
+                    <div class="card-body">
+                        <h5 class="card-title"><%= lists.title %></h5>
+                        <p class="card-text">
+                            <%= lists.title %> <br />
+                            &#8377; <%= lists.Price.toLocaleString("en-IN") %> /night
+                            <i class="tax-info"> &nbsp; &nbsp; +18% GST</i>
+                        </p>
+                        <a href="/listings/<%= lists._id %>" class="btn btn-primary">Check</a>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <% } %>
+    </div>
+
+    <form method="GET" action="/listings/new">
+        <button class="btn btn-primary">Add</button>
+    </form>
+
+<script>
+    let Switch = document.getElementById("flexSwitchCheckDefault");
+    Switch.addEventListener("click",  () => {
+      let Switch = document.getElementsByClassName("tax-info");
+      
+      for(SwitchInfo of Switch){
+
+        
+        if(SwitchInfo.style.display != "inline"){
+            SwitchInfo.style.display = "inline"
+        }
+        else{
+             SwitchInfo.style.display = "none"
+        }
+
+      }
+    });
+</script>
